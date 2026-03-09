@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const typingElement = document.getElementById("typingName")
-  const textToType = "Alex Chen"
+  const textToType = "Kaz Tran"
   let charIndex = 0
 
   function typeText() {
