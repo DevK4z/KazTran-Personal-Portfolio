@@ -1,233 +1,279 @@
-// Greeting based on time of day
-function setGreeting() {
-  const hour = new Date().getHours()
-  const greetingElement = document.getElementById("greeting")
+document.addEventListener("DOMContentLoaded", () => {
+  const particlesContainer = document.getElementById("particles")
+  const particleCount = 30
 
-  if (hour < 12) {
-    greetingElement.textContent = "Good morning"
-  } else if (hour < 18) {
-    greetingElement.textContent = "Good afternoon"
-  } else {
-    greetingElement.textContent = "Good evening"
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement("div")
+    particle.className = "particle"
+    particle.style.left = Math.random() * 100 + "%"
+    particle.style.animationDuration = Math.random() * 20 + 15 + "s"
+    particle.style.animationDelay = Math.random() * 10 + "s"
+    particle.style.width = Math.random() * 4 + 2 + "px"
+    particle.style.height = particle.style.width
+    particlesContainer.appendChild(particle)
   }
-}
 
-// Mouse tracking for animated blobs
-let mouseX = 0
-let mouseY = 0
+  const typingElement = document.getElementById("typingName")
+  const textToType = "Alex Chen"
+  let charIndex = 0
 
-document.addEventListener("mousemove", (e) => {
-  mouseX = e.clientX
-  mouseY = e.clientY
-
-  const blob1 = document.querySelector(".blob-1")
-  const blob2 = document.querySelector(".blob-2")
-
-  if (blob1) {
-    blob1.style.transform = `translate(${mouseX * 0.02}px, ${mouseY * 0.02}px)`
+  function typeText() {
+    if (charIndex < textToType.length) {
+      typingElement.textContent += textToType.charAt(charIndex)
+      charIndex++
+      setTimeout(typeText, 100)
+    } else {
+      typingElement.style.borderRight = "none"
+    }
   }
-  if (blob2) {
-    blob2.style.transform = `translate(${mouseX * -0.02}px, ${mouseY * -0.02}px)`
+
+  setTimeout(typeText, 500)
+
+  // Music Player – floating button toggles mute
+  const bgMusic = document.getElementById("bgMusic")
+  const musicPlayerBtn = document.getElementById("musicPlayerBtn")
+  const muteOverlay = document.getElementById("muteOverlay")
+
+  bgMusic.volume = 0.3
+
+  // Auto-play on first user interaction (browsers block autoplay)
+  function startPlayback() {
+    bgMusic.play().catch(() => { })
+    document.removeEventListener("click", startPlayback)
+    document.removeEventListener("touchstart", startPlayback)
   }
-})
+  document.addEventListener("click", startPlayback)
+  document.addEventListener("touchstart", startPlayback)
 
-// Navigation functionality
-function setupNavigation() {
-  const navButtons = document.querySelectorAll(".nav-btn, .mobile-nav-btn")
-  const sections = document.querySelectorAll(".content-section")
+  // Tap floating button → mute / unmute
+  musicPlayerBtn.addEventListener("click", () => {
+    bgMusic.muted = !bgMusic.muted
+    muteOverlay.classList.toggle("hidden", !bgMusic.muted)
+    musicPlayerBtn.style.opacity = bgMusic.muted ? "0.6" : "1"
+  })
 
-  navButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const targetSection = button.getAttribute("data-section")
+  // Cursor glow effect
+  const cursorGlow = document.querySelector(".cursor-glow")
 
-      // Remove active class from all buttons
-      document.querySelectorAll(".nav-btn, .mobile-nav-btn").forEach((btn) => {
-        btn.classList.remove("active")
+  document.addEventListener("mousemove", (e) => {
+    cursorGlow.style.left = e.clientX + "px"
+    cursorGlow.style.top = e.clientY + "px"
+  })
+
+  const revealElements = document.querySelectorAll(".reveal")
+  const revealItems = document.querySelectorAll(".reveal-item")
+
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active")
+        }
       })
+    },
+    { threshold: 0.1, rootMargin: "-50px" },
+  )
 
-      // Add active class to clicked button and its counterpart
-      document.querySelectorAll(`[data-section="${targetSection}"]`).forEach((btn) => {
-        btn.classList.add("active")
+  revealElements.forEach((el) => revealObserver.observe(el))
+
+  const itemObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add("visible")
+          }, index * 100)
+        }
       })
+    },
+    { threshold: 0.1 },
+  )
 
-      // Hide all sections
-      sections.forEach((section) => {
-        section.classList.remove("active")
+  revealItems.forEach((el) => itemObserver.observe(el))
+
+  const counters = document.querySelectorAll(".counter")
+
+  const counterObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const target = Number.parseInt(entry.target.dataset.target)
+          const counterValue = entry.target.querySelector(".counter-value")
+          let current = 0
+          const increment = target / 50
+          const duration = 1500
+          const stepTime = duration / 50
+
+          const updateCounter = () => {
+            current += increment
+            if (current < target) {
+              counterValue.textContent = Math.floor(current).toLocaleString()
+              setTimeout(updateCounter, stepTime)
+            } else {
+              counterValue.textContent = target >= 1000 ? (target / 1000).toFixed(1) + "k" : target
+            }
+          }
+
+          updateCounter()
+          counterObserver.unobserve(entry.target)
+        }
       })
+    },
+    { threshold: 0.5 },
+  )
 
-      // Show target section
-      const targetElement = document.getElementById(`${targetSection}-section`)
-      if (targetElement) {
-        targetElement.classList.add("active")
+  counters.forEach((counter) => counterObserver.observe(counter))
+
+  const tiltCards = document.querySelectorAll(".tilt-card")
+
+  tiltCards.forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      const centerX = rect.width / 2
+      const centerY = rect.height / 2
+      const rotateX = (y - centerY) / 20
+      const rotateY = (centerX - x) / 20
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+    })
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)"
+    })
+  })
+
+  const magneticButtons = document.querySelectorAll(".magnetic-button")
+
+  magneticButtons.forEach((button) => {
+    button.addEventListener("mousemove", (e) => {
+      const rect = button.getBoundingClientRect()
+      const x = e.clientX - rect.left - rect.width / 2
+      const y = e.clientY - rect.top - rect.height / 2
+
+      button.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`
+    })
+
+    button.addEventListener("mouseleave", () => {
+      button.style.transform = "translate(0, 0)"
+    })
+  })
+
+  const rippleButtons = document.querySelectorAll(".ripple-button")
+
+  rippleButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const rect = button.getBoundingClientRect()
+      const ripple = document.createElement("span")
+      ripple.className = "ripple"
+      ripple.style.left = e.clientX - rect.left + "px"
+      ripple.style.top = e.clientY - rect.top + "px"
+      button.appendChild(ripple)
+
+      setTimeout(() => ripple.remove(), 600)
+    })
+  })
+
+  // Active navigation on scroll
+  const sections = document.querySelectorAll(".section")
+  const navLinks = document.querySelectorAll(".nav-link")
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "-20% 0px -70% 0px",
+    threshold: 0,
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const sectionId = entry.target.getAttribute("id")
+
+        navLinks.forEach((link) => {
+          link.classList.remove("active")
+          if (link.getAttribute("data-section") === sectionId) {
+            link.classList.add("active")
+          }
+        })
+      }
+    })
+  }, observerOptions)
+
+  sections.forEach((section) => {
+    observer.observe(section)
+  })
+
+  // Smooth scroll for navigation links
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault()
+      const targetId = link.getAttribute("href")
+      const targetSection = document.querySelector(targetId)
+
+      if (targetSection) {
+        targetSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
       }
     })
   })
-}
 
-// Skills data and rendering
-const skills = [
-  { name: "React", level: 95, color: "linear-gradient(to right, #22d3ee, #3b82f6)" },
-  { name: "Next.js", level: 92, color: "linear-gradient(to right, #374151, #111827)" },
-  { name: "TypeScript", level: 90, color: "linear-gradient(to right, #60a5fa, #6366f1)" },
-  { name: "Node.js", level: 88, color: "linear-gradient(to right, #4ade80, #10b981)" },
-  { name: "Python", level: 85, color: "linear-gradient(to right, #3b82f6, #eab308)" },
-  { name: "PostgreSQL", level: 87, color: "linear-gradient(to right, #2563eb, #1e40af)" },
-  { name: "MongoDB", level: 84, color: "linear-gradient(to right, #22c55e, #15803d)" },
-  { name: "REST APIs", level: 93, color: "linear-gradient(to right, #a855f7, #ec4899)" },
-  { name: "GraphQL", level: 82, color: "linear-gradient(to right, #ec4899, #f43f5e)" },
-  { name: "Docker", level: 86, color: "linear-gradient(to right, #60a5fa, #06b6d4)" },
-  { name: "AWS", level: 80, color: "linear-gradient(to right, #fb923c, #f59e0b)" },
-  { name: "Git", level: 94, color: "linear-gradient(to right, #ef4444, #f97316)" },
-]
+  const scrollToTopBtn = document.getElementById("scrollToTop")
+  const scrollProgress = document.getElementById("scrollProgress")
 
-const technologies = [
-  "JavaScript",
-  "HTML5",
-  "CSS3",
-  "Tailwind CSS",
-  "Redux",
-  "Express.js",
-  "Nest.js",
-  "Prisma",
-  "Redis",
-  "Kubernetes",
-  "CI/CD",
-  "Jest",
-  "Webpack",
-  "Vite",
-  "Vercel",
-  "Firebase",
-  "Supabase",
-]
+  // Show/hide button based on scroll position
+  function updateScrollButton() {
+    const scrollTop = window.scrollY
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight
+    const scrollPercent = (scrollTop / docHeight) * 100
 
-function renderSkills() {
-  const skillsGrid = document.getElementById("skills-grid")
-
-  skills.forEach((skill) => {
-    const skillCard = document.createElement("div")
-    skillCard.className = "card skill-card"
-
-    skillCard.innerHTML = `
-            <div class="skill-header">
-                <div class="skill-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="16 18 22 12 16 6"/>
-                        <polyline points="8 6 2 12 8 18"/>
-                    </svg>
-                </div>
-                <span class="skill-name">${skill.name}</span>
-                <span class="skill-level">${skill.level}%</span>
-            </div>
-            <div class="skill-bar">
-                <div class="skill-progress" style="width: 0%; background: ${skill.color}"></div>
-            </div>
-        `
-
-    skillsGrid.appendChild(skillCard)
-
-    // Animate skill bar after a short delay
-    setTimeout(() => {
-      const progressBar = skillCard.querySelector(".skill-progress")
-      progressBar.style.width = `${skill.level}%`
-    }, 100)
-  })
-}
-
-function renderTechnologies() {
-  const techTags = document.getElementById("tech-tags")
-
-  technologies.forEach((tech) => {
-    const tag = document.createElement("span")
-    tag.className = "tech-tag"
-    tag.textContent = tech
-    techTags.appendChild(tag)
-  })
-}
-
-// Chat Widget Functionality
-function setupChatWidget() {
-  const chatToggle = document.getElementById('chatToggle')
-  const chatWidget = document.getElementById('chatWidget')
-  const chatClose = document.getElementById('chatClose')
-  const chatInput = document.getElementById('chatInput')
-  const chatSend = document.getElementById('chatSend')
-
-  if (!chatToggle || !chatWidget) {
-    console.log('[v0] Chat widget elements not found')
-    return
-  }
-
-  let chatVisible = false
-
-  chatToggle.addEventListener('click', () => {
-    chatVisible = !chatVisible
-    chatWidget.classList.toggle('active')
-    if (chatVisible) {
-      chatInput.focus()
+    // Show button after scrolling 300px
+    if (scrollTop > 300) {
+      scrollToTopBtn.classList.add("visible")
+    } else {
+      scrollToTopBtn.classList.remove("visible")
     }
-  })
 
-  chatClose.addEventListener('click', () => {
-    chatVisible = false
-    chatWidget.classList.remove('active')
-  })
-
-  function displayMessage(content, isUser = false) {
-    const chatMessages = document.getElementById('chatMessages')
-    const messageDiv = document.createElement('div')
-    messageDiv.className = `message ${isUser ? 'user' : 'ai'}`
-    messageDiv.innerHTML = `
-      <div class="message-content">${content}</div>
-    `
-    chatMessages.appendChild(messageDiv)
-    chatMessages.scrollTop = chatMessages.scrollHeight
+    // Update circular progress indicator (100 - percent because stroke-dashoffset works inversely)
+    const scrollOffset = 100 - scrollPercent
+    scrollProgress.style.setProperty("--scroll-progress", scrollOffset)
   }
 
-  async function sendMessage() {
-    const message = chatInput.value.trim()
-    if (!message) return
+  // Smooth scroll to top with animation
+  function scrollToTop() {
+    scrollToTopBtn.classList.add("launching")
 
-    displayMessage(message, true)
-    chatInput.value = ''
-    chatSend.disabled = true
+    // Easing function for smooth scroll
+    const scrollDuration = 800
+    const scrollStart = window.scrollY
+    const startTime = performance.now()
 
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message }),
-      })
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3)
+    }
 
-      if (response.ok) {
-        const data = await response.json()
-        displayMessage(data.reply)
+    function animateScroll(currentTime) {
+      const elapsed = currentTime - startTime
+      const progress = Math.min(elapsed / scrollDuration, 1)
+      const easeProgress = easeOutCubic(progress)
+
+      window.scrollTo(0, scrollStart * (1 - easeProgress))
+
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll)
       } else {
-        displayMessage('Sorry, I encountered an error. Please try again.')
+        scrollToTopBtn.classList.remove("launching")
       }
-    } catch (error) {
-      console.error('Chat error:', error)
-      displayMessage('Sorry, I encountered an error. Please make sure your OpenAI API is configured.')
-    } finally {
-      chatSend.disabled = false
-      chatInput.focus()
     }
+
+    requestAnimationFrame(animateScroll)
   }
 
-  chatSend.addEventListener('click', sendMessage)
-  chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      sendMessage()
-    }
-  })
-}
+  window.addEventListener("scroll", updateScrollButton, { passive: true })
+  scrollToTopBtn.addEventListener("click", scrollToTop)
 
-// Initialize everything when DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-  setGreeting()
-  setupNavigation()
-  renderSkills()
-  renderTechnologies()
-  setupChatWidget()
+  // Initial check
+  updateScrollButton()
 })
