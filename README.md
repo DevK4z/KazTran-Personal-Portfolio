@@ -34,17 +34,15 @@
 
 ---
 
-## 📂 Project Structure
-
-```text
+📂 Project Structure
+Plaintext
 KazTran-Personal-Portfolio/
 ├── assets/
 │   ├── css/            # Stylesheets (style.css)
 │   ├── img/            # Project gallery and profile images
 │   └── js/             # Interactive logic and effects
 ├── index.html          # Main entry point
-└── README.md           
-
+└── README.md           # Project documentation
 🚀 Quick Start
 Clone the repository:
 
