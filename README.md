@@ -7,10 +7,6 @@
   <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintained">
 </p>
 
-<p align="center">
-  <b>Bản sơ yếu lý lịch số - Nơi kết nối giữa kỹ thuật hạ tầng và tư duy lập trình hiện đại.</b>
-</p>
-
 ---
 
 ## 📸 Preview
@@ -20,10 +16,10 @@
 ---
 
 ## ✨ Key Features
-* **Responsive Design:** Hiển thị mượt mà trên mọi thiết bị (Mobile, Tablet, Desktop).
-* **Smooth Navigation:** Hiệu ứng cuộn và chuyển trang tinh tế.
-* **Professional Showcase:** Trình bày kinh nghiệm làm việc tại Lào Cai và các dự án tại VJU.
-* **Contact Integration:** Giúp nhà tuyển dụng kết nối với bạn chỉ trong 1 click.
+* **Responsive Design:** Fully optimized for Mobile, Tablet, and Desktop viewing.
+* **Smooth Navigation:** Intuitive scrolling and polished transition effects.
+* **Professional Showcase:** Highlights work experience in Lào Cai and academic projects at VJU.
+* **Contact Integration:** Enables recruiters and collaborators to connect with a single click.
 
 ---
 
@@ -43,8 +39,28 @@
 ```text
 KazTran-Personal-Portfolio/
 ├── assets/
-│   ├── css/            # Toàn bộ "phần hồn" (style.css)
-│   ├── img/            # Hình ảnh dự án và profile
-│   └── js/             # Logic xử lý hiệu ứng
-├── index.html          # Trang chủ chính
-└── README.md           # Chính là file này!
+│   ├── css/            # Stylesheets (style.css)
+│   ├── img/            # Project gallery and profile images
+│   └── js/             # Interactive logic and effects
+├── index.html          # Main entry point
+└── README.md           
+
+🚀 Quick Start
+Clone the repository:
+
+Bash
+git clone https://github.com/DevK4z/KazTran-Personal-Portfolio.git
+Run locally:
+Simply open index.html in your browser or use the Live Server extension in VS Code for real-time updates.
+
+👨‍💻 About Me
+I am a student at Vietnam Japan University (VJU), currently working in infrastructure management in Lào Cai, Vietnam. My mission is to combine the precision of civil engineering with the innovative power of Information Technology to build smarter, more efficient systems.
+
+🤝 Contact
+LinkedIn: [Your LinkedIn Profile]
+
+Email: [Your Professional Email]
+
+GitHub: @DevK4z
+
+<p align="center">From KazTran with ❤️</p>
