@@ -10,7 +10,6 @@
 ---
 
 ## 📸 Preview
-*(Chèn ảnh chụp màn hình website của bạn vào đây để "flex" ngay lập tức)*
 ![Portfolio Preview](/website-demo-image/Portfoloi%20preview.png "demo")
 
 ---
@@ -61,6 +60,7 @@ git clone https://github.com/DevK4z/KazTran-Personal-Portfolio.git
 ---
 
 🤝 Contact
+
 LinkedIn: https://www.linkedin.com/in/devk4z/
 
 Email: kaztran198@gmail.com
