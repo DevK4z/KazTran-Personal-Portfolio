@@ -51,15 +51,15 @@ Bash
 git clone https://github.com/DevK4z/KazTran-Personal-Portfolio.git
 Run locally:
 Simply open index.html in your browser or use the Live Server extension in VS Code for real-time updates.
-
+---
 👨‍💻 About Me
 I am a student at Vietnam Japan University (VJU), currently working in infrastructure management in Lào Cai, Vietnam. My mission is to combine the precision of civil engineering with the innovative power of Information Technology to build smarter, more efficient systems.
-
+---
 🤝 Contact
 LinkedIn: https://www.linkedin.com/in/devk4z/
 
 Email: kaztran198@gmail.com
 
 GitHub: @DevK4z
-
+---
 <p align="center">From KazTran with ❤️</p>
