@@ -305,4 +305,25 @@ document.addEventListener("DOMContentLoaded", () => {
   new mapboxgl.Marker({ element: markerEl })
     .setLngLat([103.975, 22.498])
     .addTo(map)
+
+  // Add change title when user changes tab
+  const originalTitle = document.title
+  const hiddenTitle = "Come back:("
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      document.title = hiddenTitle
+    } else {
+      document.title = originalTitle
+    }
+  })
+
+  // Add tilt effect to cards
+  VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+    max: 8,
+    speed: 400,
+    glare: true,
+    "max-glare": 0.2,
+    scale: 1.02
+  })
 })
