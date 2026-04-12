@@ -1,8 +1,8 @@
 # 🚀 KazTran Personal Portfolio
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-In-Progess-brightgreen" alt="In-Progess">
-  <img src="https://img.shields.io/badge/University-VJU-orange" alt="VJU">
+  <img src="https://img.shields.io/badge/Status-In--Progess-yellow" alt="In-Progess">
+  <img src="https://img.shields.io/badge/University-VJU-red" alt="VJU">
   <img src="https://img.shields.io/badge/Field-Civil%20Engineering%20%26%20Dev-blue" alt="Field">
   <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintained">
 </p>
